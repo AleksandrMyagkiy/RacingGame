@@ -12,6 +12,13 @@ const config = {
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    physics: {
+        default: 'matter',
+        matter: {
+            debug:false,
+            gravity: {x: 0, y: 0}
+        }
     }
 };
 
