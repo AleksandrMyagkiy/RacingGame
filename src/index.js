@@ -6,7 +6,7 @@ import GameScene from './scripts/scenes/GameScene';
 
 const config = {
     type: Phaser.AUTO,
-    width: 1280,
+    width: 1520,
     height: 720,
     scene: [BootScene, PreloadScene, GameScene],
     scale: {
@@ -16,7 +16,7 @@ const config = {
     physics: {
         default: 'matter',
         matter: {
-            debug:false,
+            debug: true,
             gravity: {x: 0, y: 0}
         }
     }
