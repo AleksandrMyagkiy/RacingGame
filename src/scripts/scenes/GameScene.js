@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Map from "../classes/Map";
 import Player from "../classes/Player";
 
+const LAPS = 3;
 export default class GameScene extends Phaser.Scene {
     constructor() {
         super('Game');
@@ -25,6 +26,21 @@ export default class GameScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, this.map.tilemap.widthInPixels, this.map.tilemap.heightInPixels);
         // позиционируем и вызываем камеру на машину игрока
         this.cameras.main.startFollow(this.player.car);
+        this.player.car.on('lap', this.onLapCmplete, this);
+
+         //  устанавливаем событие collisionactive
+        this.matter.world.on('collisionactive', (event, a, b) => {
+            // если один из обьектов это машина игрока а второй - это пятно oil
+            if (b.gameObject === this.player.car && a.gameObject.frame.name === 'oil') {
+                // то вызываем метод заноса авто
+                this.player.slide();
+            }
+        });
+    }
+    onLapCmplete(lap) {
+        if (lap > LAPS) {
+            this.scene.restart();
+        }
     }
     update() {
         this.player.move();
