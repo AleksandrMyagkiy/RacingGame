@@ -38,7 +38,7 @@ export default class Map {
         this.tilemap.findObject('oils', oil => {
             const sprite = this.scene.matter.add.sprite(oil.x + oil.width / 2, oil.y - oil.height / 2, 'objects', oil.name);
             sprite.setStatic(true);
-            sprite.setSensor(true); // делаем пятно доступным для пересечения машиной
+            sprite.setSensor(true); // делаем пятно доступным для пересечения машино
         });
     }
     createCheckpoints() {
