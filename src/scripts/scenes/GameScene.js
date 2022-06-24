@@ -3,6 +3,7 @@ import Map from "../classes/Map";
 import Player from "../classes/Player";
 import Stats from "../classes/Stats";
 import StatsPanel from "../classes/StatsPanel";
+import StatsPopup from "../classes/StatsPopup";
 
 const LAPS = 3;
 export default class GameScene extends Phaser.Scene {
@@ -26,7 +27,6 @@ export default class GameScene extends Phaser.Scene {
         this.stats = new Stats(this, LAPS);
         // выводим на екран статистику
         this.statsPanel = new StatsPanel(this, this.stats);
-
         // устанавливаем граници камеры методом setBounds() // камера не будет выходить за заданный прямоугольник
         this.cameras.main.setBounds(0, 0, this.map.tilemap.widthInPixels, this.map.tilemap.heightInPixels);
         // позиционируем и вызываем камеру на машину игрока
@@ -46,7 +46,7 @@ export default class GameScene extends Phaser.Scene {
         this.stats.onLapComplete();
 
         if (this.stats.complete) {
-            this.scene.restart();
+            this.statsPopup = new StatsPopup(this, this.stats);
         }
     }
     update(time, dt) {
