@@ -1,14 +1,14 @@
 import Phaser from 'phaser';
 import BootScene from './scripts/scenes/BootScene';
 import PreloadScene from './scripts/scenes/PreloadScene';
+import StartScene from './scripts/scenes/StartScene';
 import GameScene from './scripts/scenes/GameScene';
-
 
 const config = {
     type: Phaser.AUTO,
-    width: 1520,
+    width: 1280,
     height: 720,
-    scene: [BootScene, PreloadScene, GameScene],
+    scene: [BootScene, PreloadScene, StartScene, GameScene],
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
