@@ -14,11 +14,6 @@ export default class Player {
         this.car.setFixedRotation(true); // отменяем самовольное вращение при столкновении
         this._velocity = 0; // реальная скорость машины в данный момент времени
         this.checkpoint = 0;  // устанавливаем первоначальный чекпоинт
-        this.laps = 0; // по умолчанию количество пройденных кругов
-    }
-    get lap() {
-        // число проеханных кругов + текущий проезжаемый круг
-        return this.laps + 1;
     }
     get direction() {
         let direction = DIRECTIONS.NONE;
@@ -94,9 +89,7 @@ export default class Player {
         if (checkpoint === 1 && this.checkpoint === this.map.checkpoints.length) {
             // завершить круг
             this.checkpoint = 1;
-            // и увеличиваем количество пройденных кругов
-            ++this.laps;
-            this.car.emit('lap', this.lap);
+            this.car.emit('lap');
             // каждый новый чекпоинт должен быть равен предыдущему + 1
         } else if (checkpoint === this.checkpoint + 1) {
             // в таком случаи увеличиваем предыдущий чекпоинт на 1
