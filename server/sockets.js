@@ -5,8 +5,27 @@ module.exports = {
         this.sessions = [];
         this.io = socketIO(server);
         this.io.on('connection', socket => {
+            socket.on('playerMove', data => {
+                this.onPlayerMove(socket, data);
+            });
             this.onConnection(socket);
         });
+    },
+    onPlayerMove(socket, data) {
+        const session = this.sessions.find(session => session.playerSocket === socket || session.enemySocket === socket);
+
+        if (session) {
+            let opponentSocket;
+
+            if (session.playerSocket === socket) {
+                opponentSocket = session.enemySocket;
+            } else {
+                opponentSocket = session.playerSocket;
+            }
+
+            opponentSocket.emit('enemyMove', data);
+        }
+
     },
     // находит сессию, в которой есть сокет игрока, но нет сокета противника (игрок ждет оппонента)
     getPendingSession() {
@@ -29,14 +48,12 @@ module.exports = {
         if (!session) {
             // создать новую игровую сессию и поместить в нее сокет игрока
             this.createPendingSession(socket);
-        } else {  // если такая сессия есть - игрок уже есть и ждет противника
-            //добавить в нее сокет противника
+        } else { // если такая сессия есть - игрок уже есть и ждет противника
+            // добавить в нее сокет противника
             session.enemySocket = socket;
-            //запустить игру событием в оба сокета
+            // запустить игру событием в оба сокета
             this.startGame(session);
         }
-
-            
     }
 
 };

@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { config } from "process";
 import Map from "../classes/Map";
 import Player from "../classes/Player";
 import Stats from "../classes/Stats";
@@ -50,8 +49,14 @@ export default class GameScene extends Phaser.Scene {
 
         // создание игрока
         this.player = new Player(this, this.map, car.player);
+
         if (this.client) {
-        this.enemy = new Player(this, this.map, car.enemy);
+            this.enemy = new Player(this, this.map, car.enemy);
+            this.client.on('data', data => {
+                this.enemy.car.setX(data.x);
+                this.enemy.car.setY(data.y);
+                this.enemy.car.setAngle(data.angle);
+            });
         }
 
         // создаем статистику
@@ -84,5 +89,15 @@ export default class GameScene extends Phaser.Scene {
         this.stats.update(dt)
         this.statsPanel.render();
         this.player.move();
+        this.sync();
+    }
+    sync() {
+        if (this.client) {
+            this.client.send({
+                x: this.player.car.x,
+                y: this.player.car.y,
+                angle: this.player.car.angle
+            });
+        }
     }
 }

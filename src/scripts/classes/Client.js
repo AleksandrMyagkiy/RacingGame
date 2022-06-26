@@ -9,19 +9,29 @@ export default class Client extends Phaser.Events.EventEmitter {
     }
 
     init() {
+        this.sent = {};
         this.master = false;
-        const socket = io(HOST);
-        socket.on('connect', () => {
+        this.socket = io(HOST);
+        this.socket.on('connect', () => {
             console.log('client connected');
         });
-        socket.on('disconnect', () => {
+        this.socket.on('disconnect', () => {
             console.log('client disconnected');
         });
-        socket.on('gameStart', data => {
+        this.socket.on('gameStart', data => {
             if (data && data.master) {
                 this.master = data.master;
-            } 
+            }
             this.emit('game');
         });
+        this.socket.on('enemyMove', data => {
+            this.emit('data', data);
+        });
+    }
+    send(data) {
+        if (JSON.stringify(data) !== JSON.stringify(this.sent)) {
+            this.sent = data;
+            this.socket.emit('playerMove', data);
+        }
     }
 }
