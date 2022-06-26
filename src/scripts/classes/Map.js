@@ -49,9 +49,9 @@ export default class Map {
             this.checkpoints.push(rectangle);
         });
     }
-    getPlayerPosition() {
-        return this.tilemap.findObject('player', position => {
-            return position.name === 'player'; // возвращаем позицию игрока
+    getPlayerPosition(positionName) {
+        return this.tilemap.findObject(positionName, position => {
+            return position.name === positionName; // возвращаем позицию игрока
         });
     }
 
